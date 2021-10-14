@@ -2,10 +2,7 @@ import crypto from 'crypto';
 import dbClient from '../utils/db';
 
 function toHashPassword(password) {
-  return crypto
-    .createHash('sha1')
-    .update(JSON.stringify(password))
-    .digest('hex');
+  return crypto.createHash('sha1').update(password, 'utf-8').digest('hex');
 }
 
 class UsersController {
@@ -29,9 +26,11 @@ class UsersController {
       return res.status(400).json({ error: 'Already exist' });
     }
 
+    const hashPassword = toHashPassword(password);
+
     const addUserQuery = await dbClient.db
       .collection('users')
-      .insertOne({ email, password: toHashPassword(password) });
+      .insertOne({ email, password: hashPassword });
 
     const userToResponse = {
       id: addUserQuery.ops[0]._id,
