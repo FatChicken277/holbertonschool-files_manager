@@ -4,7 +4,7 @@ import redisClient from '../utils/redis';
 class AppController {
   static getStatus(req, res) {
     if (redisClient.isAlive() && dbClient.isAlive()) {
-      res.status(200).json({ redis: true, db: true }, 200);
+      res.status(200).json({ redis: true, db: true });
     }
   }
 
