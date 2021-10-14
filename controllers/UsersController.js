@@ -12,11 +12,6 @@ class UsersController {
   static async postNew(req, res) {
     const { email, password } = req.body;
 
-    const getUsersQuery = await dbClient.db
-      .collection('users')
-      .find({ email })
-      .toArray();
-
     if (!email) {
       return res.status(400).json({ error: 'Missing email' });
     }
@@ -24,6 +19,11 @@ class UsersController {
     if (!password) {
       return res.status(400).json({ error: 'Missing password' });
     }
+
+    const getUsersQuery = await dbClient.db
+      .collection('users')
+      .find({ email })
+      .toArray();
 
     if (getUsersQuery.length > 0) {
       return res.status(400).json({ error: 'Already exist' });
